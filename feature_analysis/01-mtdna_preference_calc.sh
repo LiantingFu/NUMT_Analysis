@@ -5,10 +5,10 @@ set -e -u -o pipefail
 # get mtregions
 # ALL; fixed; polymorphic
 
-all_info="/home/ltfu/APG_project/NUMT/c-NUMT_genomic_features/a-numts_classification/final_classification/human_numts.info.tsv"
-fixed_info="/home/ltfu/APG_project/NUMT/c-NUMT_genomic_features/a-numts_classification/final_classification/excl_chrY/fixed_numts.info.excl_chrY.tsv"
-polymorphic_info="/home/ltfu/APG_project/NUMT/c-NUMT_genomic_features/a-numts_classification/final_classification/polymorphic_numts.info.tsv"
-uncomparable_info="/home/ltfu/APG_project/NUMT/c-NUMT_genomic_features/a-numts_classification/final_classification/excl_chrY/uncomparable_numts.info.excl_chrY.tsv"
+all_info=$1
+fixed_info=$2
+polymorphic_info=$3
+uncomparable_info=$4
 
 ### mtdna region ###
 # ALL
