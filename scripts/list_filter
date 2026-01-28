@@ -1,0 +1,42 @@
+#!/usr/bin/env python
+
+import sys
+import argparse
+
+
+parser = argparse.ArgumentParser("list_filter")
+parser.add_argument("file", type=str, help="stdin or a file")
+parser.add_argument("list", type=str, help="stdin or a file, one id on each line")
+parser.add_argument("-f", "--field", type=int, required=False, default=1, help="the field to filter")
+parser.add_argument("-c", "--comment", type=str, required=False, default="#", help="comment line")
+parser.add_argument("-d", "--delimiter", type=str, required=False, default="\t", help="delimiter")
+args = parser.parse_args()
+
+
+id_list = set()
+
+for line in sys.stdin if args.list in ("stdin", "-") else open(args.list, "r"):
+	line = line.strip()
+	if not line:
+		continue
+
+	id_list.add(line)
+
+
+for line in sys.stdin if args.file in ("stdin", "-") else open(args.file, "r"):
+	line = line.strip()
+	if not line:
+		continue
+
+	if line.startswith(args.comment):
+		print(line)
+		continue
+
+	fields = line.split(args.delimiter)
+
+	if len(fields) < args.field:
+		raise ValueError(f"This line has {len(fields)} columns, but {args.field} wanted:\n{line}\n")
+
+	if fields[args.field - 1] in id_list:
+		print(line)
+

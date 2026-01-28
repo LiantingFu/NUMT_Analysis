@@ -1,0 +1,8 @@
+PANNUMT_1	pangenome	polymorphic	chr1-156852712-SV-INS-89-0	chr1	156852712	1	90	chrM	3535	3625	-
+PANNUMT_2	pangenome	polymorphic	chr1-162987625-SV-INS-131-0	chr1	162987625	1	132	chrM	13975	14107	-
+PANNUMT_3	pangenome	polymorphic	chr1-179002230-SV-INS-79-0	chr1	179002230	1	80	chrM	12740	12820	+
+PANNUMT_4	pangenome	polymorphic	chr1-37476495-SV-INS-71-0	chr1	37476495	1	72	chrM	8934	9006	+
+PANNUMT_5	pangenome	polymorphic	chr1-50636281-INDEL-INS-38-0	chr1	50636281	1	39	chrM	3677	3716	+
+PANNUMT_6	pangenome	polymorphic	chr1-53664988-SV-COMPLEX_INS-204-0	chr1	53664988	1	204	chrM	6910	7114	+
+PANNUMT_7	pangenome	polymorphic	chr1-54656-SV-INS-5873-0	chr1	54656	29	5871	chrM	3910	9755	+
+PANNUMT_8	pangenome	polymorphic	chr1-59074249-SV-INS-58-0	chr1	59074249	1	58	chrM	15420	15478	-

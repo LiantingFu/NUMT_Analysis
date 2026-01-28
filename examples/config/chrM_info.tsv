@@ -1,0 +1,3 @@
+species	fasta	repeat2_fasta	chain
+human_chrM_1	chrM_datasets/human_chrM.1.fasta	chrM_datasets/human_chrM_1.chrM_combined.fasta	chrM_datasets/human_chrM_1.aln.rCRS.chain
+chimpanzee_chrM_1	chrM_datasets/chimpanzee_chrM.1.fasta	chrM_datasets/chimpanzee_chrM_1.chrM_combined.fasta	chrM_datasets/chimpanzee_chrM_1.aln.rCRS.chain

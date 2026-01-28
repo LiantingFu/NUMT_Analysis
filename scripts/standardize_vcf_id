@@ -1,0 +1,147 @@
+#!/usr/bin/env python
+
+import re
+import sys
+import argparse
+import collections
+
+import cyvcf2
+
+
+ACGT_PATTERN = re.compile(r"^[ACGT]+$")
+ACGT_COMMA_PATTERN = re.compile(r"^[ACGT,]+$")
+
+
+def determine_variation_type(ref_allele, alt_allele):
+
+    if not ACGT_PATTERN.match(ref_allele) or not ACGT_COMMA_PATTERN.match(alt_allele):
+        return None, None, None
+
+    # trim left bases
+    while min(len(ref_allele), len(alt_allele)) > 0:
+        if ref_allele[0] == alt_allele[0]:
+            ref_allele = ref_allele[1:]
+            alt_allele = alt_allele[1:]
+        else:
+            break
+
+    # trim right bases
+    while min(len(ref_allele), len(alt_allele)) > 0:
+        if ref_allele[-1] == alt_allele[-1]:
+            ref_allele = ref_allele[:-1]
+            alt_allele = alt_allele[:-1]
+        else:
+            break
+
+    # determine vartype
+    len_ref = len(ref_allele)
+    len_alt = len(alt_allele)
+    vartype = ""  # SNV, MNP, INDEL, SV
+    svtype = ""  # SNV, MNP, INS, DEL, COMPLEX_INS, COMPLEX_DEL, COMPLEX_EQUAL
+    varlen = 0
+
+    if len_ref == len_alt == 1:
+        vartype = svtype = "SNV"
+        varlen = 1
+
+    elif len_ref == len_alt != 1 and len_ref <= 49:
+        vartype = svtype = "MNP"
+        varlen = len_ref
+
+    elif len_ref == 0 and len_alt > 0:
+        svtype = "INS"
+        varlen = len_alt
+
+    elif len_ref > 0 and len_alt == 0:
+        svtype = "DEL"
+        varlen = len_ref
+
+    else:
+        if len_ref < len_alt:
+            svtype = "COMPLEX_INS"
+        elif len_ref > len_alt:
+            svtype = "COMPLEX_DEL"
+        else:
+            svtype = "COMPLEX_EQUAL"
+        varlen = max(len_ref, len_alt)
+
+    if not vartype:
+        if 1 <= varlen <= 49:
+            vartype = "INDEL"
+        elif varlen >= 50:
+            vartype = "SV"
+        else:
+            raise ValueError(f"Unexpected varlen {varlen}.")
+
+    return vartype, svtype, str(varlen)
+
+
+def read_vcf(vcf_path):
+
+    if vcf_path in ("stdin", "-"):
+       return cyvcf2.VCF("-")
+    else:
+        return cyvcf2.VCF(vcf_path)
+
+
+def write_vcf(vcf_path, template, mode):
+
+    if not vcf_path or vcf_path in ("stdout", "-"):
+        return cyvcf2.Writer("-", template)
+    else:
+        return cyvcf2.Writer(vcf_path, template, mode=mode)
+
+
+
+if __name__ == "__main__":
+
+    parser = argparse.ArgumentParser("standardize_vcf_id")
+
+    parser.add_argument("vcf", type=str, help="stdin or a file")
+    parser.add_argument("-o", "--output", type=str, help="output path")
+    parser.add_argument("-O", "--output-type", type=str, default=None, help="output file compression [None]")
+
+    args = parser.parse_args()
+
+
+    allele_count = collections.Counter()
+
+    vcf_reader = read_vcf(args.vcf)
+
+    vcf_reader.add_info_to_header({"ID": "VARTYPE", "Description": "variation type", "Type":"Character", "Number": "."})
+    vcf_reader.add_info_to_header({"ID": "SVTYPE", "Description": "structural variation type", "Type":"Character", "Number": "."})
+    vcf_reader.add_info_to_header({"ID": "VARLEN", "Description": "variation length", "Type":"Integer", "Number": "."})
+
+    vcf_writer = write_vcf(args.output, vcf_reader, mode=args.output_type)
+
+    for record in vcf_reader:
+        id_list = list()
+        vartype_list = list()
+        svtype_list = list()
+        varlen_list = list()
+
+        for alt in record.ALT:
+            vartype, svtype, varlen = determine_variation_type(record.REF, alt)
+            if not vartype:
+                continue
+            id_ = f"{record.CHROM}-{record.POS}-{vartype}-{svtype}-{varlen}-{allele_count[record.POS]}"
+            allele_count[record.POS] += 1
+
+            id_list.append(id_)
+            vartype_list.append(vartype)
+            svtype_list.append(svtype)
+            varlen_list.append(varlen)
+
+        if not id_list:
+            continue
+
+        record.ID = ",".join(id_list)
+        record.INFO["VARTYPE"] = ",".join(vartype_list)
+        record.INFO["SVTYPE"] = ",".join(svtype_list)
+        record.INFO["VARLEN"] = ",".join(varlen_list)
+
+        vcf_writer.write_record(record)
+
+
+    vcf_reader.close()
+    vcf_writer.close()

@@ -1,0 +1,6 @@
+{
+    "ref": "test_data/chr1.fasta",
+    "chrM_info": "config/chrM_info.tsv",
+    "pangenome_vcf": "test_data/chr1.hprc-release1.vcf.gz",
+    "prefix": "chr1.hprc-release1"
+}

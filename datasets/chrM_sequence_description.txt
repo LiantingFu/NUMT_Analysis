@@ -1,0 +1,21 @@
+# description of chrM seq naming scheme
+
+{species}_chrM.{number}.fasta
+
+species:
+    human, chimpanzee, bonobo, sumatran_orangutan, gorilla, crab_eating_macaque
+number:
+    1: sequence from ncbi
+        human: NC_012920.1 Homo sapiens mitochondrion 16,569
+        chimpanzee: NC_001643.1 Pan troglodytes mitochondrion 16,554
+        bonobo: NC_001644.1 Pan paniscus mitochondrion 16,563
+        gorilla: NC_011120.1 Gorilla gorilla gorilla mitochondrion 16,412
+        sumatran_orangutan: NC_002083.1 Pongo abelii mitochondrion 16,499
+        bornean_orangutan: NC_001646.1 Pongo pygmaeus mitochondrion 16,389
+        crab eating macaque: NC_012670.1 Macaca fascicularis mitochondrion 16,575
+    2: sequence from T2T-assembly
+        human: 16,569
+        chimpanzee: 16,560
+        bonobo: 16,569
+        gorilla: 16,409
+        crab eating macaque: 16,561
