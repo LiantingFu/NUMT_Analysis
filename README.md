@@ -22,11 +22,11 @@ pixi install
 
 ## 2. Configuration & Inputs
 
-The pipeline requires a main configuration file (`config.json`) and a metadata table for mitochondrial references (`chrM_info`).
+The pipeline requires a configuration file (`config.json`) and a metadata table for mitochondrial references (`chrM_info`).
 
-### 2.1 Main configuration (`config.json`)
+### 2.1 Configuration (`config.json`)
 
-Create a `config.json` file in the repository root specifying input paths. Example:
+Create a `config.json` file in the repository root specifying input paths. `ref` specifies the reference genome used for coordinate definition. Example:
 
 ```json
 {
@@ -36,10 +36,6 @@ Create a `config.json` file in the repository root specifying input paths. Examp
   "prefix": "output_prefix_name"
 }
 ```
-
-Notes:
-
-* `ref` should point to the nuclear reference FASTA used for alignment and coordinate reporting.
 
 ### 2.2 Mitochondrial metadata (`chrM_info`)
 
