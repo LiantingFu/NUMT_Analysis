@@ -1,6 +1,6 @@
 # NUMT_Analysis
 
-A bioinformatics pipeline for the detection and characterization of Nuclear Mitochondrial DNA segments (NUMTs) utilizing pangenome graphs.
+A bioinformatics pipeline for the detection and characterization of nuclear-embedded mitochondrial DNA segments (NUMTs) utilizing pangenome graphs.
 
 ---
 
