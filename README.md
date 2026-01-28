@@ -30,12 +30,16 @@ Create a `config.json` file in the repository root specifying input paths. Examp
 
 ```json
 {
-  "ref": "path/to/reference_genome.fasta", # reference genome for coordinate definition
+  "ref": "path/to/reference_genome.fasta",
   "chrM_info": "path/to/chrM_info.tsv",
-  "pangenome_vcf": "path/to/pangenome_derived.vcf", # pangenome graph vcf file
+  "pangenome_vcf": "path/to/pangenome_derived.vcf",
   "prefix": "output_prefix_name"
 }
 ```
+
+Notes:
+
+* `ref` should point to the nuclear reference FASTA used for alignment and coordinate reporting.
 
 ### 2.2 Mitochondrial metadata (`chrM_info`)
 
